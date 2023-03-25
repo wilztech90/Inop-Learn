@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:inop_app/provider/auth_provider.dart';
+import 'package:inop_app/provider/teacherauth_provider.dart';
 import 'package:inop_app/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => TeacherAuthProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

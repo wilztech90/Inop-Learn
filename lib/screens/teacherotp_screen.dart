@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inop_app/provider/teacherauth_provider.dart';
-import 'package:inop_app/screens/teacheruploadmaterial_screen.dart';
+import 'package:inop_app/screens/teacher_home_screen.dart';
+import 'package:inop_app/screens/teacherinfo_screen.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,7 @@ class _TeacherOtpScreenState extends State<TeacherOtpScreen> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.blue.shade50),
-                            child: Image.asset("assets/stu1.jpg"),
+                            child: Image.asset("assets/tea1.png"),
                           ),
                           const SizedBox(height: 30),
                           const Text(
@@ -128,21 +129,31 @@ class _TeacherOtpScreenState extends State<TeacherOtpScreen> {
   }
 
   void verifyOtp(BuildContext context, String userOtp) {
-    final auth_provider =
+    final teacherauth_provider =
         Provider.of<TeacherAuthProvider>(context, listen: false);
 
-    auth_provider.verifyOtp(
+    teacherauth_provider.verifyOtp(
         context: context,
         verificationId: widget.verificationId,
         userOtp: userOtp,
         onSuccess: () {
-          auth_provider.checkExistingUser().then((value) async {
+          teacherauth_provider.checkExistingUser().then((value) async {
             if (value == true) {
+              teacherauth_provider.getDataFromFirestore().then((value) =>
+                  teacherauth_provider.saveUserDataLocally().then((value) =>
+                      teacherauth_provider
+                          .setSignIn()
+                          .then((value) => Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TeacherHomeScreen(),
+                              ),
+                              (route) => false))));
             } else {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TeacherUploadMaterial()),
+                      builder: (context) => const TeacherInfoScreen()),
                   (route) => false);
             }
           });

@@ -4,7 +4,7 @@ import 'package:inop_app/screens/register_screen.dart';
 // import 'package:inop_app/screens/text_to_speech.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:inop_app/provider/auth_provider.dart';
+import 'package:inop_app/provider/teacherauth_provider.dart';
 
 class RegisterTeacher extends StatefulWidget {
   const RegisterTeacher({super.key});
@@ -44,12 +44,16 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
         child: Column(
           children: [
             Container(
-              width: 280,
-              height: 280,
+              width: 200,
+              height: 200,
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                   shape: BoxShape.circle, color: Colors.blue.shade50),
-              child: Image.asset("assets/tea1.png"),
+              child: Image.asset(
+                "assets/tea1.png",
+                width: 50,
+                height: 50,
+              ),
             ),
             const SizedBox(height: 40),
             const Text(
@@ -140,8 +144,8 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
             SizedBox(
               width: double.infinity,
               height: 50,
-              child:
-                  CustomButton(text: "Register as a teacher", 
+              child: CustomButton(
+                  text: "Register as a teacher",
                   onPressed: () => sendPhoneNumber()),
             ),
             const Text(
@@ -174,10 +178,9 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
   }
 
   void sendPhoneNumber() {
-    final auth_provider = Provider.of<AuthProvider>(context, listen: false);
+    final auth_provider = Provider.of<TeacherAuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();
     auth_provider.signInWithPhone(
         context, "+${selectedCountry.phoneCode}$phoneNumber");
   }
-
 }

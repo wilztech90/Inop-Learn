@@ -16,6 +16,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phoneController = TextEditingController();
 
+
   Country selectedCountry = Country(
     phoneCode: "234",
     countryCode: "NG",
@@ -44,12 +45,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             Container(
-              width: 280,
-              height: 280,
+              width: 200,
+              height: 200,
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                   shape: BoxShape.circle, color: Colors.blue.shade50),
-              child: Image.asset("assets/stu1.jpg"),
+              child: Image.asset("assets/stu1.jpg",
+               width: 50,
+               height: 50,),
             ),
             const SizedBox(height: 40),
             const Text(

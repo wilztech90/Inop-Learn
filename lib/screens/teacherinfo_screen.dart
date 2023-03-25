@@ -1,43 +1,35 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:inop_app/modal/user_modal.dart';
-import 'package:inop_app/provider/auth_provider.dart';
-import 'package:inop_app/screens/user_home_screen.dart';
-import 'package:inop_app/utils/utils.dart';
+import 'package:inop_app/modal/teacher_model.dart';
+import 'package:inop_app/provider/teacherauth_provider.dart';
+import 'package:inop_app/screens/teacher_home_screen.dart';
 import 'package:inop_app/widgets/custome_button.dart';
 import 'package:provider/provider.dart';
 
-class StudentInfoScreen extends StatefulWidget {
-  const StudentInfoScreen({super.key});
+class TeacherInfoScreen extends StatefulWidget {
+  const TeacherInfoScreen({super.key});
 
   @override
-  State<StudentInfoScreen> createState() => _StudentInfoScreenState();
+  State<TeacherInfoScreen> createState() => _TeacherInfoScreenState();
 }
 
-class _StudentInfoScreenState extends State<StudentInfoScreen> {
-  File? image;
+class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
 
   final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final bioController = TextEditingController();
+  final coursetitleController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
-    emailController.dispose();
-    bioController.dispose();
+    coursetitleController.dispose();
   }
 
-  void selectedImage() async {
-    image = await pickImage(context);
-    setState(() {});
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     final isLoading =
-        Provider.of<AuthProvider>(context, listen: true).isLoading;
+        Provider.of<TeacherAuthProvider>(context, listen: true).isLoading;
     return Scaffold(
         body: SafeArea(
       child: isLoading == true
@@ -50,23 +42,6 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    InkWell(
-                      onTap: () => selectedImage(),
-                      child: image == null
-                          ? const CircleAvatar(
-                              backgroundColor: Colors.black,
-                              radius: 50,
-                              child: Icon(
-                                Icons.account_circle,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                            )
-                          : CircleAvatar(
-                              backgroundImage: FileImage(image!),
-                              radius: 50,
-                            ),
-                    ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.symmetric(
@@ -76,30 +51,22 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
                         children: [
                           //name
                           textField(
-                            hintText: "John Sam",
+                            hintText: "Dr Sam",
                             icon: Icons.account_circle,
                             inputType: TextInputType.name,
                             maxLines: 1,
                             controller: nameController,
                           ),
-                          //email
+                          //course title
                           textField(
-                            hintText: "abc@example.com",
-                            icon: Icons.email,
-                            inputType: TextInputType.emailAddress,
-                            maxLines: 1,
-                            controller: emailController,
-                          ),
-
-                          //bio
-
-                          textField(
-                            hintText: "Enter short bio here",
+                            hintText: "Course Title",
                             icon: Icons.edit,
                             inputType: TextInputType.name,
-                            maxLines: 2,
-                            controller: bioController,
+                            maxLines: 1,
+                            controller: coursetitleController,
                           ),
+
+                        
                         ],
                       ),
                     ),
@@ -161,32 +128,26 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
 
   // Store Data
   void storeData() async {
-    final auth_provider = Provider.of<AuthProvider>(context, listen: false);
-    UserModel userModel = UserModel(
+    final auth_provider = Provider.of<TeacherAuthProvider>(context, listen: false);
+  TeacherModel teacherModel = TeacherModel(
       name: nameController.text.trim(),
-      email: emailController.text.trim(),
-      bio: bioController.text.trim(),
-      profilePic: "",
+      coursetitle: coursetitleController.text.trim(),
       createdAt: "",
       phoneNumber: "",
       uid: "",
     );
-    if (image != null) {
-      auth_provider.saveUserDataToFirebase(
+  
+      auth_provider.saveTeacherDataToFirebase(
           context: context,
-          userModel: userModel,
-          profilePic: image!,
+          teacherModel: teacherModel,
           onSuccess: () {
             auth_provider.saveUserDataLocally().then((value) => 
             auth_provider.setSignIn().then((value) => 
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder:  (context) => const HomeScreen()),
+              MaterialPageRoute(builder:  (context) => const TeacherHomeScreen()),
               (route) => false
             )));
           });
-    } else {
-      showSnackBar(context, "Please upload your profile photo");
-    }
   }
 }

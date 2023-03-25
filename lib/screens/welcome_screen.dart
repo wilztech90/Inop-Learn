@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:inop_app/widgets/custome_button.dart';
 import 'package:inop_app/screens/register_screen.dart';
 import 'package:inop_app/provider/auth_provider.dart';
+import 'package:inop_app/provider/teacherauth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:inop_app/screens/home_screen.dart';
+import 'package:inop_app/screens/user_home_screen.dart';
+import 'package:inop_app/screens/teacher_home_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -16,6 +18,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     final auth_provider = Provider.of<AuthProvider>(context, listen: false);
+    final teacherauth_provider =
+        Provider.of<TeacherAuthProvider>(context, listen: false);
     return Scaffold(
         body: SafeArea(
             child: Center(
@@ -55,17 +59,37 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             width: double.infinity,
             height: 50,
             child: CustomButton(
-              onPressed: () {
-                auth_provider.isSignedIn == true
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()))
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterScreen()),
+              onPressed: () async {
+                if (auth_provider.isSignedIn == true) {
+                  await auth_provider
+                      .getDataFromSharedPreference()
+                      .whenComplete(
+                        () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        ),
                       );
+                } else if (teacherauth_provider.isSignedIn == true) {
+                  await teacherauth_provider
+                      .getTeacherDataFromSharedPreference()
+                      .whenComplete(
+                        () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TeacherHomeScreen(),
+                          ),
+                        ),
+                      );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  );
+                }
               },
               text: "Get Started",
             ),

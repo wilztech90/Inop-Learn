@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inop_app/provider/auth_provider.dart';
+import 'package:inop_app/screens/user_home_screen.dart';
 import 'package:inop_app/screens/studentinfo_screen.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -137,6 +138,16 @@ class _StudentOtpScreenState extends State<StudentOtpScreen> {
         onSuccess: () {
           auth_provider.checkExistingUser().then((value) async {
             if (value == true) {
+              auth_provider.getDataFromFirestore().then((value) => auth_provider
+                  .saveUserDataLocally()
+                  .then((value) => auth_provider
+                      .setSignIn()
+                      .then((value) => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false))));
             } else {
               Navigator.pushAndRemoveUntil(
                   context,
