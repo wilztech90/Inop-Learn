@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:inop_app/provider/auth_provider.dart';
-// import 'package:inop_app/provider/teacherauth_provider.dart';
-// import 'package:inop_app/screens/welcome_screen.dart';
+import 'package:inop_app/provider/teacherauth_provider.dart';
+import 'package:inop_app/screens/welcome_screen.dart';
 import 'package:inop_app/utils/document_utils.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class TeacherHomeScreen extends StatefulWidget {
   const TeacherHomeScreen({super.key});
@@ -15,12 +14,27 @@ class TeacherHomeScreen extends StatefulWidget {
 class TeacherHomeScreenState extends State<TeacherHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // final teacherauth_provider =
-    //     Provider.of<TeacherAuthProvider>(context, listen: false);
+    final teacherauth_provider =
+        Provider.of<TeacherAuthProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.black,
         title: new Text("INOP APP"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              teacherauth_provider.userSignOut().then(
+                    (value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen(),
+                      ),
+                    ),
+                  );
+            },
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ],
         leading: new Padding(
           padding: const EdgeInsets.all(8.0),
           child: new Material(
@@ -62,7 +76,7 @@ class TeacherHomeScreenState extends State<TeacherHomeScreen> {
                               ),
                               leading: Icon(
                                 Icons.picture_as_pdf,
-                                color: Colors.red,
+                                color: Colors.blue,
                                 size: 32.0,
                               ),
                             ))

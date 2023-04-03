@@ -1,11 +1,11 @@
 class UserModel {
-   String name;
-   String email;
-   String bio;
-   String profilePic;
-   String createdAt;
-   String phoneNumber;
-   String uid;
+  String name;
+  String email;
+  String bio;
+  String profilePic;
+  String createdAt;
+  String phoneNumber;
+  String uid;
 
   UserModel({
     required this.name,
@@ -42,4 +42,5 @@ class UserModel {
       "createdAt": createdAt,
     };
   }
+
 }

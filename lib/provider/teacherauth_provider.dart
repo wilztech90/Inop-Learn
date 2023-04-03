@@ -9,8 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inop_app/utils/utils.dart';
 
 class TeacherAuthProvider extends ChangeNotifier {
-  bool _isSignedIn = false;
-  bool get isSignedIn => _isSignedIn;
+  bool _isTeacherSignedIn = false;
+  bool get isTeacherSignedIn => _isTeacherSignedIn;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -29,19 +29,20 @@ class TeacherAuthProvider extends ChangeNotifier {
   void checkSignIn() async {
     final SharedPreferences shared_preference =
         await SharedPreferences.getInstance();
-    _isSignedIn = shared_preference.getBool("is_signedin") ?? false;
+    _isTeacherSignedIn =
+        shared_preference.getBool("isteacher_signedin") ?? false;
     notifyListeners();
   }
 
   Future setSignIn() async {
     final SharedPreferences shared_preference =
         await SharedPreferences.getInstance();
-    shared_preference.setBool("is_signedin", true);
-    _isSignedIn = true;
+    shared_preference.setBool("isteacher_signedin", true);
+    _isTeacherSignedIn = true;
     notifyListeners();
   }
 
-  void signInWithPhone(BuildContext context, String phoneNumber) async {
+  void TeacherSignInWithPhone(BuildContext context, String phoneNumber) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -57,7 +58,7 @@ class TeacherAuthProvider extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                     TeacherOtpScreen(verificationId: verificationId)),
+                      TeacherOtpScreen(verificationId: verificationId)),
             );
           },
           codeAutoRetrievalTimeout: (verificationId) {});
@@ -118,8 +119,8 @@ class TeacherAuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       await DateTime.now().millisecondsSinceEpoch.toString();
-        teacherModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        teacherModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      teacherModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+      teacherModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
       _teacherModel = teacherModel;
 
       await _firebaseFirestore
@@ -137,7 +138,6 @@ class TeacherAuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future getDataFromFirestore() async {
     await _firebaseFirestore
@@ -178,7 +178,7 @@ class TeacherAuthProvider extends ChangeNotifier {
     SharedPreferences shared_preferences =
         await SharedPreferences.getInstance();
     await _firebaseAuth.signOut();
-    _isSignedIn = false;
+    _isTeacherSignedIn = false;
     notifyListeners();
     shared_preferences.clear();
   }

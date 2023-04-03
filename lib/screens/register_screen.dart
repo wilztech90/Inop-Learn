@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     name: "Nigeria",
     example: "Nigeria",
     displayName: "Nigeria",
-    displayNameNoCountryCode: "NGA",
+    displayNameNoCountryCode: "NG",
     e164Key: "",
   );
 
@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showCountryPicker(
                           context: context,
                           countryListTheme:
-                              CountryListThemeData(bottomSheetHeight: 550),
+                             const CountryListThemeData(bottomSheetHeight: 550),
                           onSelect: (value) {
                             setState(() {
                               selectedCountry = value;
@@ -129,7 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: 30,
                         margin: const EdgeInsets.all(10.0),
                         decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.green),
+                            shape: BoxShape.circle, 
+                            color: Colors.green),
                         child: const Icon(
                           Icons.done,
                           color: Colors.white,
@@ -147,6 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   text: "Register as a student",
                   onPressed: () => sendPhoneNumber()),
             ),
+            const SizedBox(height: 10),
             const Text(
               "OR",
               style: TextStyle(

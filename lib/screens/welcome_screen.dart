@@ -6,6 +6,7 @@ import 'package:inop_app/provider/teacherauth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:inop_app/screens/user_home_screen.dart';
 import 'package:inop_app/screens/teacher_home_screen.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -59,29 +60,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             width: double.infinity,
             height: 50,
             child: CustomButton(
-              onPressed: () async {
+              onPressed: () {
                 if (auth_provider.isSignedIn == true) {
-                  await auth_provider
-                      .getDataFromSharedPreference()
-                      .whenComplete(
-                        () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        ),
-                      );
-                } else if (teacherauth_provider.isSignedIn == true) {
-                  await teacherauth_provider
-                      .getTeacherDataFromSharedPreference()
-                      .whenComplete(
-                        () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TeacherHomeScreen(),
-                          ),
-                        ),
-                      );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
+                } else if (teacherauth_provider.isTeacherSignedIn == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TeacherHomeScreen(),
+                    ),
+                  );
                 } else {
                   Navigator.pushReplacement(
                     context,
@@ -97,5 +90,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ],
       ),
     ))));
+  }
+
+  _WelcomeScreenState() {
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+        "25820db329e47dd62520a9005ad751b82e956eca572e1d8b807a3e2338fdd0dc/stage");
+
+    /// Handle commands from Alan Studio
+    AlanVoice.onCommand.add((command) {
+      debugPrint("got new command ${command.toString()}");
+    });
   }
 }

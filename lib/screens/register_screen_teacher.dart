@@ -146,7 +146,7 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
               height: 50,
               child: CustomButton(
                   text: "Register as a teacher",
-                  onPressed: () => sendPhoneNumber()),
+                  onPressed: () => sendTeacherPhoneNumber()),
             ),
             const Text(
               "OR",
@@ -177,10 +177,10 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
     ));
   }
 
-  void sendPhoneNumber() {
-    final auth_provider = Provider.of<TeacherAuthProvider>(context, listen: false);
+  void sendTeacherPhoneNumber() {
+    final teacherauth_provider = Provider.of<TeacherAuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();
-    auth_provider.signInWithPhone(
+    teacherauth_provider.TeacherSignInWithPhone(
         context, "+${selectedCountry.phoneCode}$phoneNumber");
   }
 }

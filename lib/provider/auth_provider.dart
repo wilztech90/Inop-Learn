@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:inop_app/modal/teacher_model.dart';
 import 'package:inop_app/modal/user_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +19,7 @@ class AuthProvider extends ChangeNotifier {
   String? _uid;
   String get uid => _uid!;
   UserModel? _userModel;
-  UserModel get userModel => _userModel!;
+  UserModel? get userModel => _userModel;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -168,7 +167,7 @@ class AuthProvider extends ChangeNotifier {
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
       );
-      _uid = userModel.uid;
+      _uid = userModel?.uid;
     });
   }
 
@@ -178,11 +177,12 @@ class AuthProvider extends ChangeNotifier {
     SharedPreferences shared_preferences =
         await SharedPreferences.getInstance();
     await shared_preferences.setString(
-        "user_model", jsonEncode(userModel.toMap()));
+        "user_model", jsonEncode(userModel?.toMap()));
   }
 
   Future getDataFromSharedPreference() async {
-    SharedPreferences shared_preferences =await SharedPreferences.getInstance();
+    SharedPreferences shared_preferences =
+        await SharedPreferences.getInstance();
     String data = shared_preferences.getString("user_model") ?? '';
     _userModel = UserModel.fromMap(jsonDecode(data));
     _uid = _userModel!.uid;
@@ -197,6 +197,4 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     shared_preferences.clear();
   }
-
-  void saveTeacherDataToFirebase({required BuildContext context, required TeacherModel teacherModel, required Null Function() onSuccess}) {}
 }

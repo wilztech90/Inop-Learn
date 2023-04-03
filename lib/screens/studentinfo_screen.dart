@@ -147,7 +147,8 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Colors.transparent),
+            borderSide: const BorderSide(
+            color: Colors.transparent),
           ),
           hintText: hintText,
           alignLabelWithHint: true,
@@ -181,9 +182,11 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
             auth_provider.setSignIn().then((value) => 
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder:  (context) => const HomeScreen()),
-              (route) => false
-            )));
+              MaterialPageRoute(builder:  (context) => const HomeScreen(),
+              ),
+              (route) => false),
+              ),
+              );
           });
     } else {
       showSnackBar(context, "Please upload your profile photo");

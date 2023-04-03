@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inop_app/modal/teacher_model.dart';
 import 'package:inop_app/provider/teacherauth_provider.dart';
 import 'package:inop_app/screens/teacher_home_screen.dart';
+import 'package:inop_app/utils/utils.dart';
 import 'package:inop_app/widgets/custome_button.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,6 @@ class TeacherInfoScreen extends StatefulWidget {
 }
 
 class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
-
   final nameController = TextEditingController();
   final coursetitleController = TextEditingController();
 
@@ -23,8 +23,6 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
     nameController.dispose();
     coursetitleController.dispose();
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +63,6 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
                             maxLines: 1,
                             controller: coursetitleController,
                           ),
-
-                        
                         ],
                       ),
                     ),
@@ -128,26 +124,31 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
 
   // Store Data
   void storeData() async {
-    final auth_provider = Provider.of<TeacherAuthProvider>(context, listen: false);
-  TeacherModel teacherModel = TeacherModel(
+    final teacherauth_provider =
+        Provider.of<TeacherAuthProvider>(context, listen: false);
+    TeacherModel teacherModel = TeacherModel(
       name: nameController.text.trim(),
       coursetitle: coursetitleController.text.trim(),
       createdAt: "",
       phoneNumber: "",
       uid: "",
     );
-  
-      auth_provider.saveTeacherDataToFirebase(
-          context: context,
-          teacherModel: teacherModel,
-          onSuccess: () {
-            auth_provider.saveUserDataLocally().then((value) => 
-            auth_provider.setSignIn().then((value) => 
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder:  (context) => const TeacherHomeScreen()),
-              (route) => false
-            )));
-          });
+   if(nameController.text.isNotEmpty && coursetitleController.text.isNotEmpty){
+      teacherauth_provider.saveTeacherDataToFirebase(
+        context: context,
+        teacherModel: teacherModel,
+        onSuccess: () {
+          teacherauth_provider.saveUserDataLocally().then((value) =>
+              teacherauth_provider.setSignIn().then((value) =>
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TeacherHomeScreen()),
+                      (route) => false)));
+        });
+   }else{
+     showSnackBar(context, "Please upload information");
+   }
+    
   }
 }

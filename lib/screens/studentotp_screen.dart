@@ -116,7 +116,7 @@ class _StudentOtpScreenState extends State<StudentOtpScreen> {
                               color: Colors.black38,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           const Text(
                             "Resend New Code",
                             style: TextStyle(
